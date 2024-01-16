@@ -1,9 +1,3 @@
-<!--A Design by W3layouts
-Author: W3layout
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -416,20 +410,54 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 </div>
             </div>
         </div>
-	    <script>
-	    // Check if the browser supports the beforeinstallprompt event
-	    if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
-	      window.addEventListener('load', () => {
-	        // Wait for the beforeinstallprompt event
-	        window.addEventListener('beforeinstallprompt', (event) => {
-	          // Prevent the default "Add to Home Screen" prompt
-	          event.preventDefault();
+	    
+	    <!-- Добавьте кнопку "Установить" -->
+	<button id="installButton">Установить</button>
 	
-	          // Automatically show the "Add to Home Screen" prompt on page load
-	          event.prompt();
-	        });
+	<script>
+	  if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
+	    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+	      console.log('Service Worker registered with scope:', registration.scope);
+	
+	      // Wait for the 'beforeinstallprompt' event
+	      window.addEventListener('beforeinstallprompt', function(event) {
+	        // Prevent the default prompt
+	        event.preventDefault();
+	        // Store the event for later use
+	        window.deferredPrompt = event;
+	        
+	        // Show your custom install button
+	        document.getElementById('installButton').style.display = 'block';
+	      });
+	    }).catch(function(error) {
+	      console.error('Service Worker registration failed:', error);
+	    });
+	  }
+	
+	  // Добавьте обработчик события для кнопки "Установить"
+	  document.getElementById('installButton').addEventListener('click', function() {
+	    showInstallPrompt();
+	  });
+	
+	  // Функция для показа предложения о добавлении на главный экран
+	  function showInstallPrompt() {
+	    if (window.deferredPrompt) {
+	      // Show your custom install button or prompt
+	      window.deferredPrompt.prompt();
+	
+	      // Wait for the user to respond to the prompt
+	      window.deferredPrompt.userChoice.then(function(choiceResult) {
+	        if (choiceResult.outcome === 'accepted') {
+	          console.log('User accepted the install prompt');
+	        } else {
+	          console.log('User dismissed the install prompt');
+	        }
+	        // Clear the deferred prompt
+	        window.deferredPrompt = null;
 	      });
 	    }
-	  </script>
+	  }
+	</script>
+
     </body>
 </html>
