@@ -3,7 +3,6 @@
   "name": "Air-Web",
   "description": "Air-Web - Обувь на любой вкус",
   "start_url": "/air-web_/",
-  "scope": ".",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
