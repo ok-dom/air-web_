@@ -417,4 +417,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             </div>
         </div>
     </body>
+	<script>
+	// Проверяем, поддерживается ли функция добавления на главный экран
+	if ('standalone' in window.navigator && window.navigator.standalone) {} 
+	else {
+		window.navigator.standalone = true;
+		alert('Теперь вы можете добавить приложение на главный экран.');
+	}
+</script>
 </html>
