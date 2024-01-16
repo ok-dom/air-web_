@@ -418,11 +418,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         </div>
     </body>
 	<script>
-	// Проверяем, поддерживается ли функция добавления на главный экран
-	if ('standalone' in window.navigator && window.navigator.standalone) {} 
-	else {
-		window.navigator.standalone = true;
-		alert('Теперь вы можете добавить приложение на главный экран.');
-	}
-</script>
+		// Register Service worker for Add to Home Screen option to work
+		if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/service-worker.js') }
+	</script>
 </html>
