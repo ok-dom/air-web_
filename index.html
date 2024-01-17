@@ -412,11 +412,11 @@
         </div>
 	    
 	<!-- Добавьте кнопку "Установить" -->
-	<button id="installButton" style="display: none;">Установить</button>
+	<button id="installButton">Установить</button>
 	
 	<script>
 	  if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
-	    navigator.serviceWorker.register('/air-web_/service-worker.js').then(function(registration) {
+	    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
 	      console.log('Service Worker registered with scope:', registration.scope);
 	
 	      // Wait for the 'beforeinstallprompt' event
@@ -428,9 +428,6 @@
 	        
 	        // Show your custom install button
 	        document.getElementById('installButton').style.display = 'block';
-	
-	        // Automatically show the install prompt on page load
-	        showInstallPrompt();
 	      });
 	    }).catch(function(error) {
 	      console.error('Service Worker registration failed:', error);
@@ -460,13 +457,7 @@
 	      });
 	    }
 	  }
-	
-	  // Вызовите showInstallPrompt при загрузке страницы
-	  window.addEventListener('load', function() {
-	      setTimeout(function() {
-	         showInstallPrompt();
-	      }, 2000); // 2000 миллисекунд = 2 секунды
-	  });
 	</script>
+
     </body>
 </html>
