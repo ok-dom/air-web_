@@ -463,9 +463,10 @@
 	
 	  // Вызовите showInstallPrompt при загрузке страницы
 	  window.addEventListener('load', function() {
-	    showInstallPrompt();
+	      setTimeout(function() {
+	         showInstallPrompt();
+	      }, 2000); // 2000 миллисекунд = 2 секунды
 	  });
 	</script>
-
     </body>
 </html>
