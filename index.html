@@ -458,17 +458,7 @@
 	  }
 	</script>
 
-	<script src="v1-push-notifications-cdn.js"></script>
-	<script>
-	  const beamsClient = new PusherPushNotifications.Client({
-	    instanceId: 'ccdb4c27-cfdc-4bce-bc0d-97aea8b4655d',
-	  });
-	
-	  beamsClient.start()
-	    .then(() => beamsClient.addDeviceInterest('hello'))
-	    .then(() => console.log('Successfully registered and subscribed!'))
-	    .catch(console.error);
-	</script>
+	<script src="index.js"></script>
 
     </body>
 </html>
