@@ -411,8 +411,8 @@
             </div>
         </div>
 	    
-	    <!-- Добавьте кнопку "Установить" -->
-	<button id="installButton">Установить</button>
+	<!-- Добавьте кнопку "Установить" -->
+	<button id="installButton" style="display: none;">Установить</button>
 	
 	<script>
 	  if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
@@ -428,6 +428,9 @@
 	        
 	        // Show your custom install button
 	        document.getElementById('installButton').style.display = 'block';
+	
+	        // Automatically show the install prompt on page load
+	        showInstallPrompt();
 	      });
 	    }).catch(function(error) {
 	      console.error('Service Worker registration failed:', error);
@@ -457,6 +460,11 @@
 	      });
 	    }
 	  }
+	
+	  // Вызовите showInstallPrompt при загрузке страницы
+	  window.addEventListener('load', function() {
+	    showInstallPrompt();
+	  });
 	</script>
 
     </body>
