@@ -141,8 +141,7 @@
                                 </li>
                                 <li><a href="contact.html">Catch</a></li>
 				<!-- Добавьте кнопку "Установить" -->
-				<li><a href="#" id="installButton">Установить</a></li>
-				<li><button id="subscriptionButton">Уведомления</button></li>
+				<li id="installButtonLi" style="display: none;"><a href="#" id="installButton">Установить</a></li>
                                 <div class="clearfix"></div>
                             </ul>
                             <div class="clearfix"></div>
@@ -426,7 +425,7 @@
 	        window.deferredPrompt = event;
 	        
 	        // Show your custom install button
-	        document.getElementById('installButton').style.display = 'block';
+	        document.getElementById('installButtonLi').style.display = 'block';
 	      });
 	    }).catch(function(error) {
 	      console.error('Service Worker registration failed:', error);
@@ -457,8 +456,6 @@
 	    }
 	  }
 	</script>
-
-	<script src="index.js"></script>
-
+	    
     </body>
 </html>
