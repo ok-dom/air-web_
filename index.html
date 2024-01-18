@@ -432,21 +432,31 @@
 			    appId: "1:249841035094:web:2b7a502354ae5582bb18f7",
 			    measurementId: "G-X9RHNJT62H"
 		  };
-		  // Инициализация Firebase
-	          firebase.initializeApp(firebaseConfig);
-		  // Получение экземпляра сервиса уведомлений
-		  const messaging = firebase.messaging();
-		  messaging.requestPermission().then(() => {
-		    	console.log('Permission granted');
+		  // Initialize Firebase
+		  const app = initializeApp(firebaseConfig);
+		  // Initialize Firebase Cloud Messaging and get a reference to the service
+		  const messaging = getMessaging(app);
+		  getToken(messaging, { vapidKey: 'BE7_yn2BMgVm7bubQrkUHqC7VP1-E-KdNwwz78X3Apo74CePlIpWs16_h2pYg6PtQgAr_4DdEVEJ7khRjcUzIxE' }).then((currentToken) => {
+			  if (currentToken) {
+				    // Send the token to your server and update the UI if necessary
+				    // ...
+			  } else {
+				    // Show permission request UI
+				    console.log('No registration token available. Request permission to generate one.');
+				    // ...
+			  }
 		  }).catch((err) => {
-		    	console.log('Permission denied', err);
+		  	  console.log('An error occurred while retrieving token. ', err);
+		  	  // ...
 		  });
-		  messaging.getToken().then((token) => {
-			console.log('Device token:', token);
-			// Отправьте токен на ваш сервер для последующего использования
-		  }).catch((err) => {
-		    	console.log('Error getting token:', err);
-		  });
+		  function requestPermission() {
+		  	  console.log('Requesting permission...');
+		  }
+		  Notification.requestPermission().then((permission) => {
+			  if (permission === 'granted') {
+			      	console.log('Notification permission granted.');
+			  }
+		  }
 	</script>
 	
 	<script>
