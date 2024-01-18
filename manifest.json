@@ -11,6 +11,9 @@
       "src": "/air-web_/icon.png",
       "sizes": "192x192",
       "type": "image/png"
+    },
+  "serviceworker": {
+      "src": "/air-web_/service-worker.js"
     }
   ]
 }
