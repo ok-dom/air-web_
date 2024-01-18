@@ -414,39 +414,33 @@
             </div>
         </div>
 
-	    	<div class="container">
-		    <div>Notification data will receive here if the app is open and focused.</div>
-		    <div class="message" style="min-height: 80px;"></div>
-		    <div>Device Token: </div>
-		</div>
-
-	<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app-compat.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-messaging-compat.js"></script>
-	    
-        <script>
-		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-		const firebaseConfig = {
-		  apiKey: "AIzaSyCKCvm_5irAQ_GIt9w8mK-evbThi4Vupyc",
-		  authDomain: "ezon-1dedf.firebaseapp.com",
-		  projectId: "ezon-1dedf",
-		  messagingSenderId: "249841035094",
-		  appId: "1:249841035094:web:2b7a502354ae5582bb18f7",
-		};
-		const app = firebase.initializeApp(firebaseConfig)
-		const messaging = firebase.messaging()
-		messaging.getToken({ vapidKey: "BE7_yn2BMgVm7bubQrkUHqC7VP1-E-KdNwwz78X3Apo74CePlIpWs16_h2pYg6PtQgAr_4DdEVEJ7khRjcUzIxE" })
-		messaging.onMessage((payload) => {
-		    console.log('Message received ', payload);
-		    const messagesElement = document.querySelector('.message')
-		    const dataHeaderElement = document.createElement('h5')
-		    const dataElement = document.createElement('pre')
-		    dataElement.style = "overflow-x: hidden;"
-		    dataHeaderElement.textContent = "Message Received:"
-		    dataElement.textContent = JSON.stringify(payload, null, 2)
-		    messagesElement.appendChild(dataHeaderElement)
-		    messagesElement.appendChild(dataElement)
-		})
-
+	<!-- Добавьте в конец <body> на вашем сайте -->
+	<script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-messaging.js"></script>
+	<script>
+		  // Вставьте сюда конфигурацию вашего проекта Firebase
+		  const firebaseConfig = {
+		      apiKey: "AIzaSyCKCvm_5irAQ_GIt9w8mK-evbThi4Vupyc",
+		      authDomain: "ezon-1dedf.firebaseapp.com",
+		      projectId: "ezon-1dedf",
+		      messagingSenderId: "249841035094",
+		      appId: "1:249841035094:web:2b7a502354ae5582bb18f7",
+		  };
+		  // Инициализация Firebase
+		  firebase.initializeApp(firebaseConfig);
+		  // Получение экземпляра сервиса уведомлений
+		  const messaging = firebase.messaging();
+		  messaging.requestPermission().then(() => {
+		    console.log('Permission granted');
+		  }).catch((err) => {
+		    console.log('Permission denied', err);
+		  });
+		  messaging.getToken().then((token) => {
+		    console.log('Device token:', token);
+		    // Отправьте токен на ваш сервер для последующего использования
+		  }).catch((err) => {
+		    console.log('Error getting token:', err);
+		  });
 	</script>
 	
 	<script>
