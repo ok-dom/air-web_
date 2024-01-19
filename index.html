@@ -480,14 +480,6 @@
 	  const firebaseMessaging = getMessaging(firebaseApp);
 	  const db = getDatabase(firebaseApp);
 	  const tokensRef = ref(db, "userTokens");
-
-	  if ("serviceWorker" in navigator) {
-		navigator.serviceWorker.register("/air-web_/firebase-messaging-sw.js").then(function(reg) {
-			console.log('Service Worker (firebase-messaging-sw.js) registered with scope:', reg.scope);
-		}).catch(function(error) {
-	      console.error('Service Worker (firebase-messaging-sw.js) registration failed:', error);
-	    });
-	  }
 		
 	  PushPermission();
 	  // Запрос на получение разрешения пользователя на отправку уведомлений
@@ -521,17 +513,29 @@
 	}
 
 	function PushSubscribe() {
-		getToken(firebaseMessaging, { vapidKey: "BE7_yn2BMgVm7bubQrkUHqC7VP1-E-KdNwwz78X3Apo74CePlIpWs16_h2pYg6PtQgAr_4DdEVEJ7khRjcUzIxE" })
-			.then(function(token) {
-				if (token) {
-				    console.log('Token:', token);
-				    // Вызов функции для сохранения токена
-				    saveTokenOnRealtimeDatabase(token);
-				}
-			}).catch(function(error) {
-				console.error(error);
-			}
-		);
+	    if ("serviceWorker" in navigator) {
+		navigator.serviceWorker
+		    .register("/air-web_/firebase-messaging-sw.js")
+		    .then(function(registration) {
+			console.log('Service Worker (firebase-messaging-sw.js) registered with scope:', registration.scope);
+			// Get registration token. Initially this makes a network call, once retrieved
+			// subsequent calls to getToken will return from cache.
+			getToken(firebaseMessaging,{vapidKey: 'BE7_yn2BMgVm7bubQrkUHqC7VP1-E-KdNwwz78X3Apo74CePlIpWs16_h2pYg6PtQgAr_4DdEVEJ7khRjcUzIxE', serviceWorkerRegistration: registration}).then((token) => {
+			    if (token) {
+				// Вызов функции для сохранения токена
+				saveTokenOnRealtimeDatabase(token);
+			    } else {
+				// Show permission request.
+				console.log('No registration token available. Request permission to generate one.');
+			    }
+			}).catch((err) => {
+			    console.log('An error occurred while retrieving token. ', err);
+			});
+		    })
+		    .catch(function(err) {
+			console.error('Service Worker (firebase-messaging-sw.js) registration failed:', err);
+		    });
+	    }
 	}
 	
 	  // Обработка входящих уведомлений
