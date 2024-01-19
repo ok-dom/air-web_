@@ -416,7 +416,7 @@
 	
 	<script>
 	  if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
-	    navigator.serviceWorker.register('/air-web_/service-worker.js').then(function(registration) {
+	    navigator.serviceWorker.register('service-worker.js').then(function(registration) {
 	      console.log('Service Worker registered with scope:', registration.scope);
 	
 	      // Wait for the 'beforeinstallprompt' event
@@ -462,7 +462,8 @@
 	<!--script type="module" src="push.js"></script-->
 	<script type="module">
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
-  		import { getMessaging } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-messaging.js";
+  		import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-messaging.js";
+		import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
 	  // Вставьте сюда свои данные конфигурации Firebase
 	      const firebaseConfig = {
 		  apiKey: "AIzaSyCKCvm_5irAQ_GIt9w8mK-evbThi4Vupyc",
@@ -476,41 +477,73 @@
 	
 	  // Инициализация Firebase
 	  const firebaseApp = initializeApp(firebaseConfig);
-  	  const messaging = getMessaging(firebaseApp);
-	
+	  const firebaseMessaging = getMessaging(firebaseApp);
+	  const db = getDatabase(firebaseApp);
+	  const tokensRef = ref(db, "userTokens");
+
+	  var registration = null;
+
+	if ("serviceWorker" in navigator) {
+		navigator.serviceWorker.register("firebase-messaging-sw.js").then(function(reg) {
+			registration = reg;
+			PushPermission();
+		});
+	}
+
 	  // Запрос на получение разрешения пользователя на отправку уведомлений
-	messaging.requestPermissionToNotify().then(() => {
-	  console.log('Permission granted');
-	  return messaging.getToken();
-	}).then((token) => {
-	  console.log('Token:', token);
+	  function PushPermission() {
+		return new Promise(function(resolve, reject) {
+			const permissionResult = Notification.requestPermission(function(result) {
+				resolve(result);
+			});
 	
-	    // Добавление токена в Realtime Database
-	    const db = firebase.database();
-	    const tokensRef = db.ref("userTokens");
-	
-	    function saveTokenOnRealtimeDatabase(token) {
-	      firebase.database().ref("userTokens").push({ token: token })
+			if (permissionResult) {
+				permissionResult.then(resolve, reject);
+			}
+		}).then(function(permissionResult) {
+			if (permissionResult === "granted") {
+				PushSubscribe();
+			}
+			else {
+				throw new Error("We weren\'t granted permission.");
+			}
+		});
+	}
+
+	function saveTokenOnRealtimeDatabase(token) {
+	    push(tokensRef, { token: token })
 	        .then(() => {
-	          console.log("Token added successfully to Realtime Database");
+	            console.log("Token added successfully");
 	        })
 	        .catch((error) => {
-	          console.error("Error adding token to Realtime Database: ", error);
+	            console.error("Error adding token: ", error);
 	        });
-	    }
-	
-	    // Вызов функции для сохранения токена
-	    saveTokenOnRealtimeDatabase(token);
-	
-	  }).catch((error) => {
-	    console.log('Permission denied', error);
-	  });
+	}
+
+	function PushSubscribe() {
+		getToken(firebaseMessaging, { vapidKey: "BE7_yn2BMgVm7bubQrkUHqC7VP1-E-KdNwwz78X3Apo74CePlIpWs16_h2pYg6PtQgAr_4DdEVEJ7khRjcUzIxE" })
+			.then(function(token) {
+				if (token) {
+				    console.log('Token:', token);
+				    // Вызов функции для сохранения токена
+				    saveTokenOnRealtimeDatabase(token);
+				}
+			}).catch(function(error) {
+				console.error(error);
+			}
+		);
+	}
 	
 	  // Обработка входящих уведомлений
-	  messaging.onMessage((payload) => {
-	    console.log('Message received:', payload);
-	    // Обработайте уведомление, как вам нужно
-	  });
+	  onMessage(firebaseMessaging, function(payload) {
+		return registration.showNotification(
+			payload.notification.title,
+			{
+				body: payload.notification.body,
+				icon: "icon.png"
+			}
+		);
+	});
 		
 	</script>
 
