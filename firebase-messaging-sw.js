@@ -23,8 +23,7 @@ messaging.onBackgroundMessage(function(payload) {
     body: 'Background Message body.',
     icon: 'icon.png'
   };
-
-  return self.registration.showNotification(notificationTitle, notificationOptions);
+   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 /*
 importScripts("https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js");
