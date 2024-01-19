@@ -481,15 +481,7 @@
 	  const db = getDatabase(firebaseApp);
 	  const tokensRef = ref(db, "userTokens");
 
-	  var registration = null;
-
-	if ("serviceWorker" in navigator) {
-		navigator.serviceWorker.register("/air-web_/firebase-messaging-sw.js").then(function(reg) {
-			registration = reg;
-			PushPermission();
-		});
-	}
-
+	  PushPermission();
 	  // Запрос на получение разрешения пользователя на отправку уведомлений
 	  function PushPermission() {
 		return new Promise(function(resolve, reject) {
