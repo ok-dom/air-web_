@@ -417,7 +417,7 @@
 	<script>
 	  if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
 	    navigator.serviceWorker.register('/air-web_/service-worker.js').then(function(registration) {
-	      console.log('Service Worker registered with scope:', registration.scope);
+	      console.log('Service Worker (service-worker.js) registered with scope:', registration.scope);
 	
 	      // Wait for the 'beforeinstallprompt' event
 	      window.addEventListener('beforeinstallprompt', function(event) {
@@ -430,7 +430,7 @@
 	        document.getElementById('installButtonLi').style.display = 'block';
 	      });
 	    }).catch(function(error) {
-	      console.error('Service Worker registration failed:', error);
+	      console.error('Service Worker (service-worker.js) registration failed:', error);
 	    });
 	  }
 	
@@ -480,6 +480,17 @@
 	  const firebaseMessaging = getMessaging(firebaseApp);
 	  const db = getDatabase(firebaseApp);
 	  const tokensRef = ref(db, "userTokens");
+
+	var registration = null;
+
+	if ("serviceWorker" in navigator) {
+		navigator.serviceWorker.register("/air-web_/firebase-messaging-sw.js").then(function(reg) {
+			console.log('Service Worker (firebase-messaging-sw.js) registered with scope:', reg.scope);
+			registration = reg;
+		}).catch(function(error) {
+	      console.error('Service Worker (firebase-messaging-sw.js) registration failed:', error);
+	    });
+	}
 
 	  PushPermission();
 	  // Запрос на получение разрешения пользователя на отправку уведомлений
