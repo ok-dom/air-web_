@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-messaging.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -14,6 +15,8 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseMessaging = getMessaging(firebaseApp);
+const db = getDatabase(firebaseApp);
+const tokensRef = ref(db, "userTokens");
 
 var registration = null;
 
@@ -42,11 +45,21 @@ function PushPermission() {
 	});
 }
 
+function saveTokenOnRealtimeDatabase(token) {
+    push(tokensRef, { token: token })
+        .then(() => {
+            console.log("Token added successfully");
+        })
+        .catch((error) => {
+            console.error("Error adding token: ", error);
+        });
+}
+
 function PushSubscribe() {
 	getToken(firebaseMessaging, { vapidKey: "BE7_yn2BMgVm7bubQrkUHqC7VP1-E-KdNwwz78X3Apo74CePlIpWs16_h2pYg6PtQgAr_4DdEVEJ7khRjcUzIxE" })
 		.then(function(token) {
 			if (token) {
-			//...
+	                    saveTokenOnRealtimeDatabase(token);
 			}
 		}).catch(function(error) {
 			console.error(error);
