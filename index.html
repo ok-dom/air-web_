@@ -481,12 +481,10 @@
 	  const db = getDatabase(firebaseApp);
 	  const tokensRef = ref(db, "userTokens");
 
-	var registration = null;
-
 	if ("serviceWorker" in navigator) {
-		navigator.serviceWorker.register("./firebase-messaging-sw.js").then(function(reg) {
+		navigator.serviceWorker.register("/air-web_/firebase-messaging-sw.js").then(function(registration) {
 			console.log('Service Worker (firebase-messaging-sw.js) registered with scope:', reg.scope);
-			registration = reg;
+			firebaseMessaging.useServiceWorker(registration);
 		}).catch(function(error) {
 	      console.error('Service Worker (firebase-messaging-sw.js) registration failed:', error);
 	    });
