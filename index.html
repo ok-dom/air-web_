@@ -459,7 +459,63 @@
 	  }
 	</script>
 
-	<script type="module" src="push.js"></script>
+	<!--script type="module" src="push.js"></script-->
+	<!-- Добавьте ваши данные конфигурации Firebase в этот скрипт -->
+	<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-messaging.js"></script>
+	
+	<script>
+	  // Вставьте сюда свои данные конфигурации Firebase
+	      const firebaseConfig = {
+		  apiKey: "AIzaSyCKCvm_5irAQ_GIt9w8mK-evbThi4Vupyc",
+		  authDomain: "ezon-1dedf.firebaseapp.com",
+		  projectId: "ezon-1dedf",
+		  storageBucket: "ezon-1dedf.appspot.com",
+		  messagingSenderId: "249841035094",
+		  appId: "1:249841035094:web:2b7a502354ae5582bb18f7",
+		  measurementId: "G-X9RHNJT62H"
+	      };
+	
+	  // Инициализация Firebase
+	  firebase.initializeApp(firebaseConfig);
+	
+	  const messaging = firebase.messaging();
+	
+	  // Запрос на получение разрешения пользователя на отправку уведомлений
+	  messaging.requestPermission().then(() => {
+	    console.log('Permission granted');
+	    return messaging.getToken();
+	  }).then((token) => {
+	    console.log('Token:', token);
+	
+	    // Добавление токена в Realtime Database
+	    const db = firebase.database();
+	    const tokensRef = db.ref("userTokens");
+	
+	    function saveTokenOnRealtimeDatabase(token) {
+	      firebase.database().ref("userTokens").push({ token: token })
+	        .then(() => {
+	          console.log("Token added successfully to Realtime Database");
+	        })
+	        .catch((error) => {
+	          console.error("Error adding token to Realtime Database: ", error);
+	        });
+	    }
+	
+	    // Вызов функции для сохранения токена
+	    saveTokenOnRealtimeDatabase(token);
+	
+	  }).catch((error) => {
+	    console.log('Permission denied', error);
+	  });
+	
+	  // Обработка входящих уведомлений
+	  messaging.onMessage((payload) => {
+	    console.log('Message received:', payload);
+	    // Обработайте уведомление, как вам нужно
+	  });
+		
+	</script>
 
     </body>
 </html>
