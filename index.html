@@ -481,6 +481,14 @@
 	  const db = getDatabase(firebaseApp);
 	  const tokensRef = ref(db, "userTokens");
 
+	  if ("serviceWorker" in navigator) {
+		navigator.serviceWorker.register("/air-web_/firebase-messaging-sw.js").then(function(reg) {
+			console.log('Service Worker (firebase-messaging-sw.js) registered with scope:', reg.scope);
+		}).catch(function(error) {
+	      console.error('Service Worker (firebase-messaging-sw.js) registration failed:', error);
+	    });
+	  }
+		
 	  PushPermission();
 	  // Запрос на получение разрешения пользователя на отправку уведомлений
 	  function PushPermission() {
