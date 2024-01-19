@@ -460,11 +460,9 @@
 	</script>
 
 	<!--script type="module" src="push.js"></script-->
-	<!-- Добавьте ваши данные конфигурации Firebase в этот скрипт -->
-	<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-messaging.js"></script>
-	
-	<script>
+	<script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+  		import { getMessaging } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-messaging.js";
 	  // Вставьте сюда свои данные конфигурации Firebase
 	      const firebaseConfig = {
 		  apiKey: "AIzaSyCKCvm_5irAQ_GIt9w8mK-evbThi4Vupyc",
@@ -477,9 +475,8 @@
 	      };
 	
 	  // Инициализация Firebase
-	  firebase.initializeApp(firebaseConfig);
-	
-	  const messaging = firebase.messaging();
+	  const firebaseApp = initializeApp(firebaseConfig);
+  	  const messaging = getMessaging(firebaseApp);
 	
 	  // Запрос на получение разрешения пользователя на отправку уведомлений
 	  messaging.requestPermission().then(() => {
