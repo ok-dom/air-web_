@@ -477,7 +477,8 @@
 	
 	  // Инициализация Firebase
 	  const firebaseApp = initializeApp(firebaseConfig);
-	  const firebaseMessaging = getMessaging(firebaseApp).useServiceWorkerRegistration(false);
+	  const firebaseMessaging = getMessaging(firebaseApp);
+		firebaseMessaging.useServiceWorkerRegistration(false);
 	  const db = getDatabase(firebaseApp);
 	  const tokensRef = ref(db, "userTokens");
 
