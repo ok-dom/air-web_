@@ -35,7 +35,7 @@ function PushSubscribe() {
 	getToken(firebaseMessaging, { vapidKey: "BE7_yn2BMgVm7bubQrkUHqC7VP1-E-KdNwwz78X3Apo74CePlIpWs16_h2pYg6PtQgAr_4DdEVEJ7khRjcUzIxE" })
 		.then(function(token) {
 			if (token) {
-				...
+			//...
 			}
 		}).catch(function(error) {
 			console.error(error);
