@@ -20,29 +20,13 @@ const tokensRef = ref(db, "userTokens");
 
 var registration = null;
 
-if ("serviceWorker" in navigator) {
-	navigator.serviceWorker.register("/air-web_/firebase-messaging-sw.js").then(function(reg) {
-		registration = reg;
-	});
-}
-
-function PushPermission() {
-	return new Promise(function(resolve, reject) {
-		const permissionResult = Notification.requestPermission(function(result) {
-			resolve(result);
-		});
-
-		if (permissionResult) {
-			permissionResult.then(resolve, reject);
-		}
-	}).then(function(permissionResult) {
-		if (permissionResult === "granted") {
-			PushSubscribe();
-		}
-		else {
-			throw new Error("We weren\'t granted permission.");
-		}
-	});
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/air-web_/firebase-messaging-sw.js').then(function(reg) {
+      console.log('Service Worker registered with scope:', reg.scope);
+      registration = reg;
+    }).catch(function(error) {
+      console.error('Service Worker registration failed:', error);
+    });
 }
 
 function saveTokenOnRealtimeDatabase(token) {
@@ -65,6 +49,25 @@ function PushSubscribe() {
 			console.error(error);
 		}
 	);
+}
+
+function PushPermission() {
+	return new Promise(function(resolve, reject) {
+		const permissionResult = Notification.requestPermission(function(result) {
+			resolve(result);
+		});
+
+		if (permissionResult) {
+			permissionResult.then(resolve, reject);
+		}
+	}).then(function(permissionResult) {
+		if (permissionResult === "granted") {
+			PushSubscribe();
+		}
+		else {
+			throw new Error("We weren\'t granted permission.");
+		}
+	});
 }
 
 onMessage(firebaseMessaging, function(payload) {
