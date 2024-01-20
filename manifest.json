@@ -1,7 +1,7 @@
 {
-  "short_name": "******************************",
-  "name": "++++++++++++++++++++++++++++++",
-  "description": "",
+  "short_name": "Air-Web",
+  "name": "Air-Web",
+  "description": "Air-Web - Обувь на любой вкус",
   "start_url": "/air-web_/",
   "display": "standalone",
   "background_color": "#ffffff",
